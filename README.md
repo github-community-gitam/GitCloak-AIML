@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Invisibility Cloak Project
 
 A Python-based implementation of a Harry Potter style invisibility cloak using OpenCV and computer vision techniques.
@@ -147,3 +148,6 @@ This project is open source and available under the MIT License.
 - Inspired by the Harry Potter invisibility cloak
 - Built using OpenCV computer vision library
 - Thanks to the open-source community for the amazing tools
+=======
+# GitCloak: AI Magic with OpenCV
+>>>>>>> gitcloak/main
