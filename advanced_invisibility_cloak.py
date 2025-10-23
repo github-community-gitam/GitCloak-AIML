@@ -1,6 +1,5 @@
 """
 Advanced Invisibility Cloak Project
-Enhanced version with additional features and better error handling
 """
 
 import cv2
@@ -10,15 +9,9 @@ import argparse
 import sys
 
 class InvisibilityCloak:
+    
+    """Initialize camera settings and color detection parameters"""
     def __init__(self, camera_index=0, width=640, height=480):
-        """
-        Initialize the Invisibility Cloak
-        
-        Args:
-            camera_index (int): Camera index (default: 0)
-            width (int): Camera width resolution
-            height (int): Camera height resolution
-        """
         self.camera_index = camera_index
         self.width = width
         self.height = height
@@ -33,9 +26,9 @@ class InvisibilityCloak:
         
         # Morphological kernel
         self.kernel = np.ones((3, 3), np.uint8)
-        
+
+    """Initialize the camera and validate its functionality"""
     def initialize_camera(self):
-        """Initialize the camera with error handling"""
         try:
             self.cap = cv2.VideoCapture(self.camera_index)
             
@@ -61,15 +54,9 @@ class InvisibilityCloak:
             if self.cap:
                 self.cap.release()
             return False
-    
+            
+    """Capture and store the static background image"""
     def capture_background(self, frames_to_capture=60, countdown_time=3):
-        """
-        Capture the background frame
-        
-        Args:
-            frames_to_capture (int): Number of frames to capture for background
-            countdown_time (int): Countdown time before capturing
-        """
         print(f"Background capture will start in {countdown_time} seconds...")
         print("Please move out of the camera view!")
         
@@ -95,17 +82,9 @@ class InvisibilityCloak:
         
         print("Background captured successfully!")
         return True
-    
-    def create_red_mask(self, hsv_frame):
-        """
-        Create a mask for red color detection
         
-        Args:
-            hsv_frame: Frame in HSV color space
-            
-        Returns:
-            Combined mask for red regions
-        """
+    """Generate a binary mask to detect red-colored regions"""
+    def create_red_mask(self, hsv_frame):
         masks = []
         
         # Create masks for both red ranges
@@ -127,18 +106,9 @@ class InvisibilityCloak:
         combined_mask = cv2.medianBlur(combined_mask, 5)
         
         return combined_mask
-    
-    def apply_invisibility_effect(self, frame, mask):
-        """
-        Apply the invisibility effect
         
-        Args:
-            frame: Current frame
-            mask: Red color mask
-            
-        Returns:
-            Frame with invisibility effect applied
-        """
+    """Apply the invisibility effect using the red mask"""
+    def apply_invisibility_effect(self, frame, mask):
         # Create inverted mask
         mask_inv = cv2.bitwise_not(mask)
         
@@ -153,22 +123,17 @@ class InvisibilityCloak:
         final_frame = cv2.add(frame_no_cloak, background_cloak)
         
         return final_frame
-    
+        
+    """Overlay status and control information on the frame"""
     def add_info_overlay(self, frame):
-        """Add informational overlay to the frame"""
         # Add text overlay
         font = cv2.FONT_HERSHEY_SIMPLEX
         cv2.putText(frame, "Invisibility Cloak Active", (10, 30), font, 0.7, (0, 255, 0), 2)
         cv2.putText(frame, "Press 'q' to quit, 'r' to recapture background", (10, 60), font, 0.5, (255, 255, 255), 1)
         return frame
-    
+
+    """Run the main invisibility cloak loop and handle user inputs"""
     def run_invisibility_cloak(self, show_debug=False):
-        """
-        Main loop for the invisibility cloak effect
-        
-        Args:
-            show_debug (bool): Show debug windows
-        """
         if not self.initialize_camera():
             return False
         
@@ -242,9 +207,9 @@ class InvisibilityCloak:
             return False
         finally:
             self.cleanup()
-    
+
+    """Test and verify live camera feed"""
     def test_camera(self):
-        """Test camera functionality"""
         if not self.initialize_camera():
             return False
         
@@ -277,16 +242,16 @@ class InvisibilityCloak:
             return False
         finally:
             self.cleanup()
-    
+
+    """Release camera and close all OpenCV windows"""
     def cleanup(self):
-        """Clean up resources"""
         if self.cap:
             self.cap.release()
         cv2.destroyAllWindows()
         print("Resources cleaned up successfully")
 
+"""Parse arguments and run the invisibility cloak or camera test"""
 def main():
-    """Main function with command line argument parsing"""
     parser = argparse.ArgumentParser(description='Invisibility Cloak using OpenCV')
     parser.add_argument('--camera', type=int, default=0, help='Camera index (default: 0)')
     parser.add_argument('--width', type=int, default=640, help='Camera width (default: 640)')
